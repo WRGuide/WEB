@@ -165,18 +165,17 @@ function toggleStatus(element) {
             <div class="form-group">
               <div class="col-xs-6" style="padding:0;padding-right:5px">
                 <label>Asignatura</label>
-                <select id="modal-sign" type="text" class="form-control" ></select>
+                <input readonly id="modal-sign" type="text" class="form-control" >
               </div>
-
-            <div class="col-xs-6" style="padding:0;padding-left:5px">
-              <label>Tipo</label>
-              <select id="modal-type" type="text" class="form-control" ></select>
-            </div>
+              <div class="col-xs-6" style="padding:0;padding-left:5px">
+                <label>Tipo</label>
+                <input readonly id="modal-type" type="text" class="form-control" >
+              </div>
             </div>
             <div class="form-group">
               <label>Fecha</label>
               <div class="input-group date dp-input">
-                <input id="modal-date" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input readonly id="modal-date" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
           </div>
             <div class="form-group">
@@ -220,8 +219,16 @@ $(document).ready(function() {
         data: { fn: 'consultarTodosEventos', arg: null },
         error: function() { alert('there was an error while fetching events!'); },
       },
-      eventClick: function(calEvent, jsEvent, view) {
+      eventRender: function(event, element) {
+        return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + event.color +";background-color:"+event.color+"><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
+
+      },
+      eventClick: function(calEvent, jsEvent) {
+
         $('#myModal').modal('show');
+        document.getElementById('modal-sign').value = calEvent.title;
+        document.getElementById('modal-type').value = calEvent.description;
+        document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
         //alert('Event: ' + calEvent.title + ' | ' + calEvent.id);
         //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
         //alert('View: ' + view.name);

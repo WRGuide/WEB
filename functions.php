@@ -115,7 +115,7 @@
   function consultarTodosEventos(){
     global $conn;
 
-    $myArray = array();
+    $myArray = array();//concat_ws('\n', e.siglas, n.descripcion) as 'title'
     if ($result = $conn->query("SELECT id,fecha as 'start', e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
 
       while($row = mysqli_fetch_assoc($result)) {
