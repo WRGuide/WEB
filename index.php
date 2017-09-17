@@ -103,7 +103,7 @@ function toggleStatus(element) {
       <div class="col-xs-9" style="max-height:88px">
         <div class="form-inline" style="padding-top:10px;max-height:44px">
           <label class="control-label " for="email">Asignatura:
-            <select id="e-input-sub" class="form-control" style="width:100px">
+            <select id="e-input-sub" class="form-control" style="width:100px" selected="ASORC">
             </select></label>
           <label class="control-label " for="email">Tipo:
             <select id="e-input-type" class="form-control" style="width:80px">
@@ -153,6 +153,48 @@ function toggleStatus(element) {
   </div>
 
   <div id="mostrarResult"> </div>
+
+  <div class="modal fade" id="myModal" role="dialog">
+     <div class="modal-dialog">
+       <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Editar Evento</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <div class="col-xs-6" style="padding:0;padding-right:5px">
+                <label>Asignatura</label>
+                <select id="modal-sign" type="text" class="form-control" ></select>
+              </div>
+
+            <div class="col-xs-6" style="padding:0;padding-left:5px">
+              <label>Tipo</label>
+              <select id="modal-type" type="text" class="form-control" ></select>
+            </div>
+            </div>
+            <div class="form-group">
+              <label>Fecha</label>
+              <div class="input-group date dp-input">
+                <input id="modal-date" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+          </div>
+            <div class="form-group">
+              <label>Nota</label>
+              <input id="modal-note" type="text" class="form-control" >
+            </div>
+          </div>
+          <div class="modal-footer" style="text-align: left;">
+          	<div class="form-inline">
+      				<div class="form-group" >
+        				<input type="button" class="btn btn-info" id="pwd" value="Actualizar" onclick="lanzarAjax('actualizarEvento',)">
+                <input type="button" class="btn btn-danger" id="pwd" value="Borrar" onclick="lanzarAjax">
+       				</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 </body>
 <script>
 $('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true});
@@ -178,9 +220,15 @@ $(document).ready(function() {
         data: { fn: 'consultarTodosEventos', arg: null },
         error: function() { alert('there was an error while fetching events!'); },
       },
+      eventClick: function(calEvent, jsEvent, view) {
+        $('#myModal').modal('show');
+        //alert('Event: ' + calEvent.title + ' | ' + calEvent.id);
+        //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+        //alert('View: ' + view.name);
+
+    },
       defaultView: 'month',
 			navLinks: true, // can click day/week names to navigate views
-			editable: true,
 		});
 	});
 
