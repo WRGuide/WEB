@@ -100,7 +100,7 @@
     $sql = "SELECT evento FROM eventos Where email='" . $email . "' and siglas ='" . $siglas. "' and tipo ='" . $tipo . ";";
     $result = $conn->query($sql);
     if ($result->num_rows == 0) {
-      $sql = "INSERT INTO Eventos (email, siglas, nivel, fecha, porcentaje) VALUES ('".$email."', '".$siglas."', '".$tipo."', '". $fecha."', '". $porcentaje. "');";
+      $sql = "INSERT INTO Eventos (email, siglas, nivel, fecha, porcentaje,nota) VALUES ('".$email."', '".$siglas."', '".$tipo."', '". $fecha."', '". $porcentaje. "',0);";
 
       if ($conn->query($sql) === TRUE) {
           echo "Evento añadida correctamente.";
@@ -116,7 +116,7 @@
     global $conn;
 
     $myArray = array();//concat_ws('\n', e.siglas, n.descripcion) as 'title'
-    if ($result = $conn->query("SELECT id, fecha as 'start', e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
+    if ($result = $conn->query("SELECT id, fecha as 'start', e.nota as 'nota',e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
 
       while($row = mysqli_fetch_assoc($result)) {
 
@@ -146,6 +146,33 @@
     echo $rdata;
   }
 
+  function actualizarEvento($array){
+      global $conn;
+
+      $sql = "UPDATE Eventos SET porcentaje = '" . $array[1] . "', nota = '" . $array[2] . "' where id = '" . $array[0] . "';";
+
+      if ($conn->query($sql) === TRUE) {
+        echo "Record updated successfully";
+      } else {
+        echo "Error updating record: " . $conn->error;
+      }
+  }
+
+  function eliminarEvento($array){
+    global $conn;
+
+    $sql = "DELETE FROM eventos WHERE id = '" . $array . "';";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Record deleted successfully";
+    } else {
+        echo "Error deleting record: " . $conn->error;
+    }
+
+
+  }
+
+
   $funcion = $_POST['fn'];
   $array = $_POST['arg'];
   switch ($funcion) {
@@ -163,6 +190,10 @@
       consultarTodosEventos();break;
     case 'consultarTodosTipos':
       consultarTodosTipos();break;
+    case 'actualizarEvento':
+      actualizarEvento($array);break;
+    case 'eliminarEvento':
+      eliminarEvento($array);break;
     default:break;
   }
 

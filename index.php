@@ -176,7 +176,7 @@ function toggleStatus(element) {
 
             <label class="control-label " for="email">Fecha:</label>
               <div class="input-group">
-                <input id="modal-date" style="width:100%" type="text" class="form-control">
+                <input readonly id="modal-date" style="width:100%;background-color:#fff" type="text" class="form-control">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
               </div>
           </div>
@@ -206,53 +206,46 @@ function toggleStatus(element) {
     </div>
   </div>
 </body>
-<script>
-$('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true});
-$('#colorSelector').ColorPicker({
-    color: '#0000ff',onShow: function (colpkr) {$(colpkr).fadeIn(500);return false;	},
-    onHide: function (colpkr) {$(colpkr).fadeOut(500);return false;	},
-    onChange: function (hsb, hex, rgb) {$('#colorSelector').css('backgroundColor', '#' + hex);$('#colorSelector').val('#' + hex);}
-  });
-$(document).ready(function() {
-	$('#calendar').fullCalendar({
-			header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'listDay,listWeek,month'
-			},
-      views: {
-				listDay: { buttonText: 'Listar dia' },
-				listWeek: { buttonText: 'Listar Semana' }
-			},
-      events: {
-        url: '/functions.php',
-        type: 'POST',
-        data: { fn: 'consultarTodosEventos', arg: null },
-        error: function() { alert('there was an error while fetching events!'); },
-      },
-      eventRender: function(event, element) {
-        return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + event.color +";background-color:"+event.color+"><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
-
-      },
-      eventClick: function(calEvent, jsEvent) {
-
-        $('#myModal').modal('show');
-        document.getElementById('modal-sign').value = calEvent.title;
-        document.getElementById('modal-type').value = calEvent.description;
-        document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
-        document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,])};
-        document.getElementById('modal-%').value = calEvent.porcentaje;
-
-        lanzarAjax('actualizarEvento',)
-        //alert('Event: ' + calEvent.title + ' | ' + calEvent.id);
-        //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-        //alert('View: ' + view.name);
-
-    },
-      defaultView: 'month',
-			navLinks: true, // can click day/week names to navigate views
-		});
-	});
-
-</script>
+  <script>
+    $('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true});
+    $('#colorSelector').ColorPicker({
+        color: '#0000ff',onShow: function (colpkr) {$(colpkr).fadeIn(500);return false;	},
+        onHide: function (colpkr) {$(colpkr).fadeOut(500);return false;	},
+        onChange: function (hsb, hex, rgb) {$('#colorSelector').css('backgroundColor', '#' + hex);$('#colorSelector').val('#' + hex);}
+      });
+    $(document).ready(function() {
+    	$('#calendar').fullCalendar({
+    			header: {
+    				left: 'prev,next today',
+    				center: 'title',
+    				right: 'listDay,listWeek,month'
+    			},
+          views: {
+    				listDay: { buttonText: 'Listar dia' },
+    				listWeek: { buttonText: 'Listar Semana' }
+    			},
+          events: {
+            url: '/functions.php',
+            type: 'POST',
+            data: { fn: 'consultarTodosEventos', arg: null },
+            error: function() { alert('there was an error while fetching events!'); },
+          },
+          eventRender: function(event, element) {
+            return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + event.color +";background-color:"+event.color+"><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
+          },
+          eventClick: function(calEvent, jsEvent) {
+            $('#myModal').modal('show');
+            document.getElementById('modal-sign').value = calEvent.title;
+            document.getElementById('modal-type').value = calEvent.description;
+            document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
+            document.getElementById('modal-%').value = calEvent.porcentaje;
+            document.getElementById('modal-note').value = calEvent.nota;
+            document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();};
+            document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id,);refrescarEvento();$('#myModal').modal('hide');};
+          },
+          defaultView: 'month',
+    		  navLinks: true, // can click day/week names to navigate views
+    	});
+    });
+  </script>
 </html>
