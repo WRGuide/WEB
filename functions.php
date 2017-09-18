@@ -25,12 +25,12 @@
       $sql = "INSERT INTO Usuarios (email, contra) VALUES ('".$email."', '".$array[1]."')";
 
       if ($conn->query($sql) === TRUE) {
-          echo "Usuario registrado correctamente.";
+          echo json_encode(array("success","Usuario registrado correctamente."));
       } else {
-          echo "Error: " . $sql . "<br>" . $conn->error;
+          echo json_encode(array("danger","Error: " . $sql . "<br>" . $conn->error));
       }
     } else {
-        echo "Usuario ya registrado";
+        echo json_encode(array("danger","Usuario ya registrado"));
     }
   }
 
@@ -48,7 +48,7 @@
       echo "true";
     }
     else {
-      echo "No se ha encontado un usuario con esos datos.";
+      echo json_encode(array("danger","No se ha encontado un usuario con esos datos."));
     }
   }
 
@@ -64,12 +64,12 @@
       $sql = "INSERT INTO Asignaturas (email, siglas, descripcion, color) VALUES ('".$email."', '".$siglas."', '".$descripcion."', '". $color. "');";
 
       if ($conn->query($sql) === TRUE) {
-          echo "Asignatura añadida correctamente.";
+        echo json_encode(array("success","Asignatura añadida correctamente."));
       } else {
-          echo "Error: " . $sql . "<br>" . $conn->error;
+          echo json_encode(array("danger","Error: " . $sql . "<br>" . $conn->error));
       }
     } else {
-        echo "Asignatura ya registrada";
+        echo json_encode(array("danger","Asignatura ya registrada"));
     }
 
   }
@@ -81,13 +81,10 @@
     $sql = "SELECT siglas FROM Asignaturas Where email='" . $email . "';";
 
     $rdata = ""; $result = $conn->query($sql);
-    if ($result->num_rows == 0) {
-      $rdata = "---";
-    }else {
-      while($row = mysqli_fetch_assoc($result)) {
+    if ($result->num_rows != 0) {
+        while($row = mysqli_fetch_assoc($result)) {
         $rdata = $rdata."<option>".$row['siglas']."</option>";
       }
-
     }
     echo $rdata;
 
@@ -103,12 +100,12 @@
       $sql = "INSERT INTO Eventos (email, siglas, nivel, fecha, porcentaje,nota) VALUES ('".$email."', '".$siglas."', '".$tipo."', '". $fecha."', '". $porcentaje. "',0);";
 
       if ($conn->query($sql) === TRUE) {
-          echo "Evento añadida correctamente.";
+          echo json_encode(array("success","Evento añadido correctamente."));
       } else {
-          echo "Error: " . $sql . "<br>" . $conn->error;
+          echo json_encode(array("danger","Error: " . $sql . "<br>" . $conn->error));
       }
     } else {
-        echo "Evento ya añadido";
+        echo json_encode(array("danger","Evento ya añadido"));
     }
   }
 
@@ -152,9 +149,9 @@
       $sql = "UPDATE Eventos SET porcentaje = '" . $array[1] . "', nota = '" . $array[2] . "' where id = '" . $array[0] . "';";
 
       if ($conn->query($sql) === TRUE) {
-        echo "Record updated successfully";
+        echo json_encode(array("success","Asignatura actualizada correctamente."));
       } else {
-        echo "Error updating record: " . $conn->error;
+        echo json_encode(array("danger","Error updating record: " . $conn->error));
       }
   }
 
@@ -164,14 +161,11 @@
     $sql = "DELETE FROM eventos WHERE id = '" . $array . "';";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Record deleted successfully";
+        echo json_encode(array("success","Record deleted successfully"));
     } else {
-        echo "Error deleting record: " . $conn->error;
+        echo json_encode(array("danger","Error deleting record: " . $conn->error));
     }
-
-
   }
-
 
   $funcion = $_POST['fn'];
   $array = $_POST['arg'];

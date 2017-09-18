@@ -1,6 +1,7 @@
 ----------------
-|| Alpha v1.0 ||
+|| Alpha v1.1 ||
 ----------------
 
-· Update and Remove finished.
-· PHP echo UI not finished.
+· PHP echo finished
+· PHP echo UI not finished {login:not,web:yes}.
+· No tested.

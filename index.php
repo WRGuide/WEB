@@ -14,11 +14,14 @@
   <link href="./css/extraline.css" rel="stylesheet"> <!-- NoResponsive -->
   <link href="./css/colorpicker.css" rel="stylesheet"><!-- ColorPicker -->
   <script src="./js/colorpicker.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="./css/fullcalendar.min.css"><!-- FullCalendar -->
+  <link rel="stylesheet" href="./css/fullcalendar.min.css"><!-- FullCalendar -->
   <script src="./js/fullcalendar.min.js" type="text/javascript"></script>
   <script src="./js/es.js" type="text/javascript"></script>
-  <?php session_start(['cookie_lifetime' => 86400,]); ?>
+  <link rel="stylesheet" href="./css/animate.css"><!-- FullCalendar -->
+  <script src="./js/bootstrap-notify.js" type="text/javascript"></script><!-- Notifies -->
+    <?php session_start(['cookie_lifetime' => 86400,]); ?>
 <script>
+
 function refrescarEvento(){$('#calendar').fullCalendar("refetchEvents");}
 function lanzarAjax(funcion,array){
   jQuery.ajax({
@@ -32,8 +35,9 @@ function lanzarAjax(funcion,array){
       else if(funcion=='consultarTodosTipos'){
         document.getElementById('e-input-type').innerHTML = data;
       }else {
-        console.log(data);
-        $('#mostrarResult').html(data);
+        var respuesta = JSON.parse(data);
+        prueba(String(respuesta[0]),String(respuesta[1]));
+        $('#mostrarResult').html(respuesta[0]+'|'+respuesta[1]);
       }
     }
   });
@@ -247,5 +251,20 @@ function toggleStatus(element) {
     		  navLinks: true, // can click day/week names to navigate views
     	});
     });
+
+    function prueba(p1,p2) {
+      $.notify({
+        message: p2
+      },
+      { type: p1,
+        newest_on_top: true,
+        delay: 1000,
+        animate: {
+    		    enter: 'animated fadeInDown',
+    		    exit: 'animated fadeOutUp'
+    	  },
+      });
+    }
+
   </script>
 </html>
