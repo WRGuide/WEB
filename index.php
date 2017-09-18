@@ -37,7 +37,7 @@ function lanzarAjax(funcion,array){
       }else {
         var respuesta = JSON.parse(data);
         prueba(String(respuesta[0]),String(respuesta[1]));
-        $('#mostrarResult').html(respuesta[0]+'|'+respuesta[1]);
+        //$('#mostrarResult').html(respuesta[0]+'|'+respuesta[1]);
       }
     }
   });
@@ -244,27 +244,20 @@ function toggleStatus(element) {
             document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
             document.getElementById('modal-%').value = calEvent.porcentaje;
             document.getElementById('modal-note').value = calEvent.nota;
-            document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();};
+            document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
             document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id,);refrescarEvento();$('#myModal').modal('hide');};
           },
           defaultView: 'month',
     		  navLinks: true, // can click day/week names to navigate views
     	});
     });
-
     function prueba(p1,p2) {
-      $.notify({
-        message: p2
-      },
+      $.notify({message:p2},
       { type: p1,
         newest_on_top: true,
         delay: 1000,
-        animate: {
-    		    enter: 'animated fadeInDown',
-    		    exit: 'animated fadeOutUp'
-    	  },
+        animate: {enter: 'animated fadeInDown',exit: 'animated fadeOutUp'},
       });
     }
-
   </script>
 </html>

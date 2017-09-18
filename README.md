@@ -1,7 +1,7 @@
 ----------------
-|| Alpha v1.1 ||
+|| Beta v0.9 ||
 ----------------
 
-· PHP echo finished
-· PHP echo UI not finished {login:not,web:yes}.
-· No tested.
+· Webpage finished.<br>
+· No fully tested.<br>
+· Fix blank inserts.

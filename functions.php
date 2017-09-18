@@ -57,7 +57,7 @@
     global $conn;
     $email = $array[0]; $siglas = $array[1]; $color = $array[2]; $descripcion = $array[3];
 
-    $sql = "SELECT asignatura FROM Asignaturas Where email='" . $email . "' and siglas ='" . $siglas . "';";
+    $sql = "SELECT siglas FROM Asignaturas Where email='" . $email . "' and siglas ='" . $siglas . "';";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 0) {
@@ -94,7 +94,7 @@
     global $conn;
     $email = $array[0]; $siglas = $array[1]; $tipo = $array[2]; $fecha = $array[3];$porcentaje = $array[4];
 
-    $sql = "SELECT evento FROM eventos Where email='" . $email . "' and siglas ='" . $siglas. "' and tipo ='" . $tipo . ";";
+    $sql = "SELECT email FROM eventos Where email='" . $email . "' and siglas ='" . $siglas. "' and nivel ='" . $tipo . "';";
     $result = $conn->query($sql);
     if ($result->num_rows == 0) {
       $sql = "INSERT INTO Eventos (email, siglas, nivel, fecha, porcentaje,nota) VALUES ('".$email."', '".$siglas."', '".$tipo."', '". $fecha."', '". $porcentaje. "',0);";
@@ -116,7 +116,6 @@
     if ($result = $conn->query("SELECT id, fecha as 'start', e.nota as 'nota',e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
 
       while($row = mysqli_fetch_assoc($result)) {
-
               //$aux = $'{'."'title':".$row['siglas'].'-'.$row['nivel']."','start':'".$row['fecha']."','end':'".$row['fecha']."}";
               $myArray[] = $row;
       }

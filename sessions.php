@@ -12,6 +12,8 @@
   <link href="./css/reglog.css" rel="stylesheet">
   <script src="./js/reglog.js" type="text/javascript"></script>
 
+  <link rel="stylesheet" href="./css/animate.css"><!-- FullCalendar -->
+  <script src="./js/bootstrap-notify.js" type="text/javascript"></script><!-- Notifies -->
   <script>
   function lanzarAjax(funcion,array){
     jQuery.ajax({
@@ -22,7 +24,8 @@
           if(funcion=='iniciarSesion' && data=='true') {
               window.location.replace("./index.php");
           } else {
-            $('#mostrarResult').html(data);
+            var respuesta = JSON.parse(data);
+            prueba(String(respuesta[0]),String(respuesta[1]));
           }
         }
     });
@@ -89,8 +92,17 @@
   			</div>
   		</div>
   	</div>
-
     <div id="mostrarResult"></div>
 
-
-</body></html>
+</body>
+<script>
+function prueba(p1,p2) {
+  $.notify({message:p2},
+  { type: p1,
+    newest_on_top: true,
+    delay: 1000,
+    animate: { enter:'animated fadeInDown',exit:'animated fadeOutUp'},
+  });
+}
+</script>
+</html>
