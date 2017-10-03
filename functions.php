@@ -153,7 +153,20 @@
         echo json_encode(array("danger","Error updating record: " . $conn->error));
       }
   }
-
+
+  function entregadoEvento($array){
+
+      global $conn;
+      $sql = "UPDATE eventos SET status = '". $array[1] ."' where id = '" . $array[0] . "';";
+
+      if ($conn->query($sql) === TRUE) {
+        echo json_encode(array("success","Asignatura actualizada correctamente."));
+      } else {
+        echo json_encode(array("danger","Error updating record: " . $conn->error));
+      }
+  }
+
+
   function eliminarEvento($array){
     global $conn;
 
@@ -187,6 +200,9 @@
       actualizarEvento($array);break;
     case 'eliminarEvento':
       eliminarEvento($array);break;
+    case 'entregadoEvento':
+      entregadoEvento($array);break;
+
     default:break;
   }
 

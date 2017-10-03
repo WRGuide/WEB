@@ -171,7 +171,7 @@ function toggleStatus(element) {
               <label>Asignatura</label>
               <div class="input-group">
                 <input readonly id="modal-sign" type="text" class="form-control" style="background-color:#fff">
-                <span class="input-group-addon"><i class="glyphicon"><b>Entregado</b></i></span>
+                <span class="input-group-addon"><label id="label_status" style="margin-bottom: 0px"></label></span>
               </div>
             </div>
             <div class="col-xs-6" style="padding:0;padding-left:5px">
@@ -206,7 +206,7 @@ function toggleStatus(element) {
     				<div class="form-group">
       				<input type="button" class="btn btn-info" id="modal-update" value="Actualizar">
               <input type="button" class="btn btn-danger" id="modal-delete" value="Borrar">
-              <input type="button" class="btn btn-warning" id="modal-grey" value="Entregada">
+              <input type="button" class="btn btn-warning" id="modal-grey">
             </div>
           </div>
         </div>
@@ -243,13 +243,22 @@ function toggleStatus(element) {
           },
           eventClick: function(calEvent, jsEvent) {
             $('#myModal').modal('show');
-            document.getElementById('modal-sign').value = calEvent.title + ((calEvent.status==1) ? " - NO ENTREGADA":" - ENTREGADA");
+            document.getElementById('modal-sign').value = calEvent.title;
             document.getElementById('modal-type').value = calEvent.description;
             document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
             document.getElementById('modal-%').value = calEvent.porcentaje;
             document.getElementById('modal-note').value = calEvent.nota;
             document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
             document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id);refrescarEvento();$('#myModal').modal('hide');};
+            if(calEvent.status==1) {
+              document.getElementById('label_status').innerHTML = "NO ENTREGADA";
+              document.getElementById('modal-grey').value = "Entregada"
+              document.getElementById('modal-grey').onclick = function(){lanzarAjax('entregadoEvento',[calEvent.id,0]);refrescarEvento();$('#myModal').modal('hide');};
+            }else {
+              document.getElementById('modal-grey').value = "No Entregada"
+              document.getElementById('label_status').innerHTML = "ENTREGADA";
+              document.getElementById('modal-grey').onclick = function(){lanzarAjax('entregadoEvento',[calEvent.id,1]);refrescarEvento();$('#myModal').modal('hide');};
+            }
           },
           defaultView: 'month',
     		  navLinks: true, // can click day/week names to navigate views
