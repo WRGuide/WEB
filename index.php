@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php session_start(); error_reporting(E_ALL ^ E_NOTICE);if($_SESSION['us-mail']=='') header('Location: sessions.php');?>
 <html lang="es">
 <head>
   <title>WorkEvent</title>
@@ -8,9 +8,9 @@
   <script src="./js/jquery.min.js"></script><!-- jQuery -->
   <link href="./css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap -->
   <script src="./js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css"> <!-- DatePicker -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/locales/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
+  <link href="./css/bootstrap-datepicker.min.css" rel="stylesheet" > <!-- DatePicker -->
+  <script src="./js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+  <script src="./js/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
   <link href="./css/extraline.css" rel="stylesheet"> <!-- NoResponsive -->
   <link href="./css/colorpicker.css" rel="stylesheet"><!-- ColorPicker -->
   <script src="./js/colorpicker.js" type="text/javascript"></script>
@@ -19,7 +19,7 @@
   <script src="./js/es.js" type="text/javascript"></script>
   <link rel="stylesheet" href="./css/animate.css"><!-- FullCalendar -->
   <script src="./js/bootstrap-notify.js" type="text/javascript"></script><!-- Notifies -->
-    <?php session_start(['cookie_lifetime' => 86400,]); ?>
+
 <script>
 
 function refrescarEvento(){$('#calendar').fullCalendar("refetchEvents");}
@@ -88,7 +88,7 @@ function toggleStatus(element) {
 </script>
 
 </head>
-<body onclick="<?php if($_SESSION['us-mail']=='') header('Location: sessions.php');?>">
+<body>
   <!--//NAVBAR-->
   <nav id="nav-top" class="navbar navbar-default" style="margin:0 auto;width:315px;text-align: center;">
     <button id="n-addevent" style="margin-top:10px;margin-right:10px" type="button" class="btn btn-default btn-sm" onclick="toggleStatus('div_ev')";>
@@ -145,7 +145,7 @@ function toggleStatus(element) {
         </div>
       </div>
       <div class="col-xs-3" style="max-height:88px;height:80px">
-        <button style="margin-top:10px;margin-right:10px;height:100%" type="button" class="btn btn-default btn-block" onclick="lanzarAjax('crearAsignatura',['<?php echo $_SESSION["us-mail"];?>',document.getElementById('a-sigla').value,document.getElementById('colorSelector').value,document.getElementById('a-desc').value]);">
+        <button style="margin-top:10px;margin-right:10px;height:100%" type="button" class="btn btn-default btn-block" onclick="lanzarAjax('crearAsignatura',['<?php echo $_SESSION["us-mail"];?>',document.getElementById('a-sigla').value,document.getElementById('colorSelector').value,document.getElementById('a-desc').value]);refrescarEvento();">
           <span style="font-size: 61px;" class="glyphicon glyphicon-plus"></span>
         </button>
       </div>
@@ -169,7 +169,10 @@ function toggleStatus(element) {
           <div class="form-group">
             <div class="col-xs-6" style="padding:0;padding-right:5px">
               <label>Asignatura</label>
-              <input readonly id="modal-sign" type="text" class="form-control" style="background-color:#fff">
+              <div class="input-group">
+                <input readonly id="modal-sign" type="text" class="form-control" style="background-color:#fff">
+                <span class="input-group-addon"><i class="glyphicon"><b>Entregado</b></i></span>
+              </div>
             </div>
             <div class="col-xs-6" style="padding:0;padding-left:5px">
               <label>Tipo</label>
@@ -200,10 +203,11 @@ function toggleStatus(element) {
         </div>
         <div class="modal-footer" style="text-align: left;">
         	<div class="form-inline">
-    				<div class="form-group" >
+    				<div class="form-group">
       				<input type="button" class="btn btn-info" id="modal-update" value="Actualizar">
               <input type="button" class="btn btn-danger" id="modal-delete" value="Borrar">
-     				</div>
+              <input type="button" class="btn btn-warning" id="modal-grey" value="Entregada">
+            </div>
           </div>
         </div>
       </div>
@@ -232,20 +236,20 @@ function toggleStatus(element) {
             url: '/functions.php',
             type: 'POST',
             data: { fn: 'consultarTodosEventos', arg: null },
-            error: function() { alert('there was an error while fetching events!'); },
+            error: function() { prueba('danger','there was an error while fetching events!'); },
           },
           eventRender: function(event, element) {
-            return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + event.color +";background-color:"+event.color+"><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
+            return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + ((event.status==1) ? event.color:"#505050") + ";background-color:" + ((event.status==1) ? event.color:"#505050") + "><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
           },
           eventClick: function(calEvent, jsEvent) {
             $('#myModal').modal('show');
-            document.getElementById('modal-sign').value = calEvent.title;
+            document.getElementById('modal-sign').value = calEvent.title + ((calEvent.status==1) ? " - NO ENTREGADA":" - ENTREGADA");
             document.getElementById('modal-type').value = calEvent.description;
             document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
             document.getElementById('modal-%').value = calEvent.porcentaje;
             document.getElementById('modal-note').value = calEvent.nota;
             document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
-            document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id,);refrescarEvento();$('#myModal').modal('hide');};
+            document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id);refrescarEvento();$('#myModal').modal('hide');};
           },
           defaultView: 'month',
     		  navLinks: true, // can click day/week names to navigate views

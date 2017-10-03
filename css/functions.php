@@ -1,13 +1,11 @@
 <?php
   session_start();
-  //error_reporting(E_ALL ^ E_NOTICE);
+  error_reporting(E_ALL ^ E_NOTICE);
   $servername = "localhost";
-  $username = "root";
-  $password = "";
+  $username = "id2958630_userroot";
+  $password = "pscalendarioroot";
   $bdname = "id2958630_web";
-//$username = "id2958630_userroot";
-//$password = "pscalendarioroot";
-
+
   // Create connection
   $conn = new mysqli($servername, $username, $password,  $bdname);
 
@@ -99,7 +97,7 @@
     $sql = "SELECT email FROM eventos Where email='" . $email . "' and siglas ='" . $siglas. "' and nivel ='" . $tipo . "';";
     $result = $conn->query($sql);
     if ($result->num_rows == 0) {
-      $sql = "INSERT INTO eventos (email, siglas, nivel, fecha, porcentaje, nota, status) VALUES ('".$email."', '".$siglas."', '".$tipo."', '". $fecha."', '". $porcentaje. "',0,1);";
+      $sql = "INSERT INTO eventos (email, siglas, nivel, fecha, porcentaje,nota) VALUES ('".$email."', '".$siglas."', '".$tipo."', '". $fecha."', '". $porcentaje. "',0);";
 
       if ($conn->query($sql) === TRUE) {
           echo json_encode(array("success","Evento añadido correctamente."));
@@ -115,7 +113,7 @@
     global $conn;
 
     $myArray = array();//concat_ws('\n', e.siglas, n.descripcion) as 'title'
-    if ($result = $conn->query("SELECT id, fecha as 'start', e.nota as 'nota',e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color, e.status FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
+    if ($result = $conn->query("SELECT id, fecha as 'start', e.nota as 'nota',e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
 
       while($row = mysqli_fetch_assoc($result)) {
               //$aux = $'{'."'title':".$row['siglas'].'-'.$row['nivel']."','start':'".$row['fecha']."','end':'".$row['fecha']."}";
