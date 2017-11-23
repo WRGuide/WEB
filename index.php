@@ -19,7 +19,9 @@
   <script src="./js/es.js" type="text/javascript"></script>
   <link rel="stylesheet" href="./css/animate.css"><!-- FullCalendar -->
   <script src="./js/bootstrap-notify.js" type="text/javascript"></script><!-- Notifies -->
-
+
+  <script src="./js.js" type="text/javascript"></script>
+
 <script>
 
 function refrescarEvento(){$('#calendar').fullCalendar("refetchEvents");}
@@ -158,61 +160,9 @@ function toggleStatus(element) {
 
   <div id="mostrarResult"> </div>
 
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">×</button>
-          <h4 class="modal-title">Editar Evento</h4>
-        </div>
-        <div class="modal-body" style="height:230px">
-          <div class="form-group">
-            <div class="col-xs-6" style="padding:0;padding-right:5px">
-              <label>Asignatura</label>
-              <div class="input-group">
-                <input readonly id="modal-sign" type="text" class="form-control" style="background-color:#fff">
-                <span class="input-group-addon"><label id="label_status" style="margin-bottom: 0px"></label></span>
-              </div>
-            </div>
-            <div class="col-xs-6" style="padding:0;padding-left:5px">
-              <label>Tipo</label>
-              <input readonly id="modal-type" type="text" class="form-control" style="background-color:#fff">
-            </div>
-          </div>
-          <div class="form-group">
-
-            <label class="control-label " for="email">Fecha:</label>
-              <div class="input-group">
-                <input readonly id="modal-date" style="width:100%;background-color:#fff" type="text" class="form-control">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-              </div>
-          </div>
-          <div class="form-group">
-            <div class="col-xs-6" style="padding:0;padding-right:5px">
-              <label>Porcentaje</label>
-              <div class="input-group">
-                <input id="modal-%" style="width:100%" type="text" class="form-control">
-                <span class="input-group-addon"><i class="glyphicon"><b>%</b></i></span>
-              </div>
-            </div>
-            <div class="col-xs-6" style="padding:0;padding-right:5px">
-              <label>Nota</label>
-              <input id="modal-note" type="text" class="form-control" >
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer" style="text-align: left;">
-        	<div class="form-inline">
-    				<div class="form-group">
-      				<input type="button" class="btn btn-info" id="modal-update" value="Actualizar">
-              <input type="button" class="btn btn-danger" id="modal-delete" value="Borrar">
-              <input type="button" class="btn btn-warning" id="modal-grey">
-          </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="modal fade in" id="myModal" role="dialog" style="display: none; padding-right: 17px;">
+  </div>
+
 </body>
   <script>
     $('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true});
@@ -244,6 +194,8 @@ function toggleStatus(element) {
             return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + ((event.status==1) ? event.color:"#505050") + ";background-color:" + ((event.status==1) ? event.color:"#505050") + "><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
           },
           eventClick: function(calEvent, jsEvent) {
+            var a = loadModel("Editar",calEvent);
+            document.getElementById('myModal').innerHTML = a;
             $('#myModal').modal('show');
             document.getElementById('modal-sign').value = calEvent.title;
             document.getElementById('modal-type').value = calEvent.description;
