@@ -1,5 +1,5 @@
-<?php session_start(); error_reporting(E_ALL ^ E_NOTICE);?>
-<html lang="en">
+<?php session_start();?>
+<html lang="es">
 <head>
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
@@ -21,11 +21,7 @@
         url: 'functions.php',
         data: {fn: funcion, arg: array},
         success: function (data) {
-          console.log(data);
-          console.log(funcion);
-          console.log((funcion=="iniciarSesion"));
-          console.log((data));
-          if(funcion=="iniciarSesion" && data) {
+            if(funcion=="iniciarSesion" && data) {
               window.location.replace("./index.php");
           } else {
             var respuesta = JSON.parse(data);
@@ -35,8 +31,7 @@
     });
   }
   </script>
-
-</head>
+</head>
 <body>
 
   <div class="container">

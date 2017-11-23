@@ -1,4 +1,4 @@
-<?php session_start(); error_reporting(E_ALL ^ E_NOTICE);if($_SESSION['us-mail']=='') header('Location: sessions.php');?>
+<?php session_start(); if($_SESSION['us-mail']=='') header('Location: sessions.php');?>
 <html lang="es">
 <head>
   <title>WorkEvent</title>
@@ -207,7 +207,7 @@ function toggleStatus(element) {
       				<input type="button" class="btn btn-info" id="modal-update" value="Actualizar">
               <input type="button" class="btn btn-danger" id="modal-delete" value="Borrar">
               <input type="button" class="btn btn-warning" id="modal-grey">
-            </div>
+          </div>
           </div>
         </div>
       </div>
@@ -237,7 +237,7 @@ function toggleStatus(element) {
           events: {
             url: '/functions.php',
             type: 'POST',
-            data: { fn: 'consultarTodosEventos', arg: <?php echo $_SESSION["us-mail"];?> },
+            data: { fn: 'consultarTodosEventos', arg: '<?php echo $_SESSION["us-mail"];?>' },
             error: function() { prueba('danger','there was an error while fetching events!'); },
           },
           eventRender: function(event, element) {
