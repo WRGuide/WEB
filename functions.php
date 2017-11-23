@@ -111,11 +111,14 @@
     }
   }
 
-  function consultarTodosEventos(){
+  function consultarTodosEventos($array){
     global $conn;
 
     $myArray = array();//concat_ws('\n', e.siglas, n.descripcion) as 'title'
-    if ($result = $conn->query("SELECT id, fecha as 'start', e.nota as 'nota',e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color, e.status FROM eventos e, asignaturas a, niveles n where e.siglas = a.siglas and e.nivel = n.nivel")) {
+    if ($result = $conn->query(
+        "SELECT id, fecha as 'start', e.nota as 'nota',e.porcentaje as 'porcentaje',e.siglas as 'title', n.descripcion as 'description','true' as 'allDay',a.color, e.status".
+        "FROM eventos e, asignaturas a, niveles n WHERE e.siglas = a.siglas AND e.nivel = n.nivel AND e.email =".$array.";"
+    ) {
 
       while($row = mysqli_fetch_assoc($result)) {
               //$aux = $'{'."'title':".$row['siglas'].'-'.$row['nivel']."','start':'".$row['fecha']."','end':'".$row['fecha']."}";
@@ -193,7 +196,7 @@
     case 'crearEvento':
       crearEvento($array);break;
     case 'consultarTodosEventos':
-      consultarTodosEventos();break;
+      consultarTodosEventos($array);break;
     case 'consultarTodosTipos':
       consultarTodosTipos();break;
     case 'actualizarEvento':

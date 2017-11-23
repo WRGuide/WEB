@@ -237,7 +237,7 @@ function toggleStatus(element) {
           events: {
             url: '/functions.php',
             type: 'POST',
-            data: { fn: 'consultarTodosEventos', arg: null },
+            data: { fn: 'consultarTodosEventos', arg: <?php echo $_SESSION["us-mail"];?> },
             error: function() { prueba('danger','there was an error while fetching events!'); },
           },
           eventRender: function(event, element) {
