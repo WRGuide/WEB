@@ -109,19 +109,19 @@ function toggleStatus(element) {
     <form action="POST"  class="navbar navbar-default" style="margin:0 auto;min-width:600px;width:600px;text-align: center;padding-bottom:10px">
       <div class="col-xs-9" style="max-height:88px">
         <div class="form-inline" style="padding-top:10px;max-height:44px">
-          <label class="control-label " for="email">Asignatura:
+          <label class="control-label">Asignatura:
             <select id="e-input-sub" class="form-control" style="width:100px" selected="ASORC">
             </select></label>
-          <label class="control-label " for="email">Tipo:
+          <label class="control-label">Tipo:
             <select id="e-input-type" class="form-control" style="width:80px">
             </select></label>
         </div>
         <div class="form-inline" style="padding-top:10px;max-height:44px">
-          <label class="control-label " for="email">Fecha:
+          <label class="control-label">Fecha:
             <div class="input-group date dp-input">
               <input id="e-input-date" style="width:100px" type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div></label>
-          <label class="control-label " for="email">Porcentaje:
+          <label class="control-label">Porcentaje:
             <input id="e-input-%" style="width:100px" type="text" class="form-control"></label>
         </div>
       </div>
@@ -136,14 +136,14 @@ function toggleStatus(element) {
     <form action="POST" class="navbar navbar-default" style="margin:0 auto;min-width:600px;width:600px;text-align: center;padding-bottom:10px">
       <div class="col-xs-9" style="max-height:88px">
         <div class="form-inline" style="padding-top:10px;max-height:44px">
-          <label class="control-label " for="email">Siglas:
+          <label class="control-label">Siglas:
             <input id="a-sigla" style="width:100px" type="text" class="form-control"></label>
 
-          <label class="control-label " for="email">Color:
+          <label class="control-label">Color:
             <input  id="colorSelector" style="width:34px" class="form-control" type="text" readonly></label>
         </div>
         <div class="form-inline" style="padding-top:10px;max-height:44px">
-          <label class="control-label " for="email">Descripcion:
+          <label class="control-label">Descripcion:
             <input id="a-desc" type="text" class="form-control" style="width:auto"></label>
         </div>
       </div>
@@ -192,15 +192,16 @@ function toggleStatus(element) {
             error: function() { prueba('danger','there was an error while fetching events!'); },
           },
           eventRender: function(event, element) {
-            return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + ((event.status==1) ? event.color:"#505050") + ";background-color:" + ((event.status==1) ? event.color:"#505050") + "><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
+            return $("<div class='fc-h-event fc-event fc-start fc-end' style='border-color:white;background-color:" + ((event.status==1) ? event.color:"#505050") + "'><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
           },
           eventClick: function(calEvent, jsEvent) {
             document.getElementById('myModal').innerHTML = loadModel("Editar");
             lanzarAjax('consultarTodasAsignaturas',['<?php echo $_SESSION["us-mail"];?>', calEvent.title]);
             lanzarAjax("consultarTodosTipos",[calEvent.description]);
-            $('#myModal').modal('show');
-            //document.getElementById('modal-type').value = calEvent.description;
-            document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
+            document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
+            $('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true,defaultDate:moment(calEvent.start).format('DD-MM-YYYY')});
+
+            document.getElementById('modal-tnumber').value = calEvent.description.replace().replace(/[a-z]/gi,'').trim();
             document.getElementById('modal-%').value = calEvent.porcentaje;
             document.getElementById('modal-note').value = calEvent.nota;
             document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
@@ -214,6 +215,7 @@ function toggleStatus(element) {
               document.getElementById('label_status').innerHTML = "ENTREGADA";
               document.getElementById('modal-grey').onclick = function(){lanzarAjax('entregadoEvento',[calEvent.id,1]);refrescarEvento();$('#myModal').modal('hide');};
             }
+            $('#myModal').modal('show');
           },
           defaultView: 'month',
     		  navLinks: true, // can click day/week names to navigate views
