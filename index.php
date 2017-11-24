@@ -23,6 +23,7 @@
   <script src="./js.js" type="text/javascript"></script>
 
 <script>
+
 
 function refrescarEvento(){$('#calendar').fullCalendar("refetchEvents");}
 function lanzarAjax(funcion,array){
@@ -32,10 +33,10 @@ function lanzarAjax(funcion,array){
     data: {fn: funcion, arg: array},
     success: function (data) {
       if(funcion=='consultarTodasAsignaturas'){
-        document.getElementById('e-input-sub').innerHTML = data;
+        document.getElementById('modal-sign').innerHTML = data.replace("<option>"+array[1] , "<option selected>"+array[1]);
       }
       else if(funcion=='consultarTodosTipos'){
-        document.getElementById('e-input-type').innerHTML = data;
+        document.getElementById('modal-type').innerHTML = data.replace("<option>"+array[0].replace(/[0-9]/g, '').trim(),"<option selected>"+array[0].replace(/[0-9]/g, '').trim());;
       }else {
         var respuesta = JSON.parse(data);
         prueba(String(respuesta[0]),String(respuesta[1]));
@@ -194,11 +195,11 @@ function toggleStatus(element) {
             return $("<div class='fc-h-event fc-event fc-start fc-end' style=border-color:" + ((event.status==1) ? event.color:"#505050") + ";background-color:" + ((event.status==1) ? event.color:"#505050") + "><b><p style=font-size:15px;margin-bottom:0px>" + event.title + "</p></b>"+event.description+"</div>");
           },
           eventClick: function(calEvent, jsEvent) {
-            var a = loadModel("Editar",calEvent);
-            document.getElementById('myModal').innerHTML = a;
-            $('#myModal').modal('show');
-            document.getElementById('modal-sign').value = calEvent.title;
-            document.getElementById('modal-type').value = calEvent.description;
+            document.getElementById('myModal').innerHTML = loadModel("Editar");
+            lanzarAjax('consultarTodasAsignaturas',['<?php echo $_SESSION["us-mail"];?>', calEvent.title]);
+            lanzarAjax("consultarTodosTipos",[calEvent.description]);
+            $('#myModal').modal('show');
+            //document.getElementById('modal-type').value = calEvent.description;
             document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
             document.getElementById('modal-%').value = calEvent.porcentaje;
             document.getElementById('modal-note').value = calEvent.nota;

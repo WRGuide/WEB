@@ -131,12 +131,12 @@
   function consultarTodosTipos(){
     global $conn;
 
-    $sql = "SELECT nivel FROM niveles;";
+    $sql = "SELECT descripcion FROM niveles;";
 
     $rdata = ""; $result = $conn->query($sql);
     if ($result->num_rows != 0) {
         while($row = mysqli_fetch_assoc($result)) {
-        $rdata = $rdata."<option>".$row['nivel']."</option>";
+        $rdata = $rdata."<option>".$row['descripcion']."</option>";
       }
 
     }
@@ -191,7 +191,7 @@
     case 'crearAsignatura':
       crearAsignatura($array);break;
     case 'consultarTodasAsignaturas':
-      consultarTodasAsignaturas($array);break;
+      consultarTodasAsignaturas($array[0]);break;
     case 'crearEvento':
       crearEvento($array);break;
     case 'consultarTodosEventos':
