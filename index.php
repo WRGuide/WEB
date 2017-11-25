@@ -33,10 +33,12 @@ function lanzarAjax(funcion,array){
     data: {fn: funcion, arg: array},
     success: function (data) {
       if(funcion=='consultarTodasAsignaturas'){
-        document.getElementById('modal-sign').innerHTML = data.replace("<option>"+array[1] , "<option selected>"+array[1]);
+        (array[1]!=null ? document.getElementById('modal-sign').innerHTML = data.replace("<option>"+array[1] , "<option selected>"+array[1])
+          : document.getElementById('modal-sign').innerHTML = data);
       }
       else if(funcion=='consultarTodosTipos'){
-        document.getElementById('modal-type').innerHTML = data.replace("<option>"+array[0].replace(/[0-9]/g, '').trim(),"<option selected>"+array[0].replace(/[0-9]/g, '').trim());;
+        (array[0]!=null ? document.getElementById('modal-type').innerHTML = data.replace("<option>"+array[0].replace(/[0-9]/g, '').trim(),"<option selected>"+array[0].replace(/[0-9]/g, '').trim())
+        : document.getElementById('modal-type').innerHTML = data);
       }else {
         var respuesta = JSON.parse(data);
         prueba(String(respuesta[0]),String(respuesta[1]));
@@ -200,11 +202,12 @@ function toggleStatus(element) {
             lanzarAjax("consultarTodosTipos",[calEvent.description]);
             document.getElementById('modal-date').value = moment(calEvent.start).format('DD-MM-YYYY');
             $('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true,defaultDate:moment(calEvent.start).format('DD-MM-YYYY')});
-
+            document.getElementById('modal-sign').value;
+            document.getElementById('modal-type').value;
             document.getElementById('modal-tnumber').value = calEvent.description.replace().replace(/[a-z]/gi,'').trim();
             document.getElementById('modal-%').value = calEvent.porcentaje;
             document.getElementById('modal-note').value = calEvent.nota;
-            document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento',[calEvent.id,document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
+            document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento', [calEvent.id,document.getElementById('modal-sign').value,document.getElementById('modal-type').value + " " + document.getElementById('modal-tnumber').value,document.getElementById('modal-date').value.split('-').reverse().join('-'),document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
             document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id);refrescarEvento();$('#myModal').modal('hide');};
             if(calEvent.status==1) {
               document.getElementById('label_status').innerHTML = "NO ENTREGADA";
@@ -217,6 +220,17 @@ function toggleStatus(element) {
             }
             $('#myModal').modal('show');
           },
+          dayClick: function(date, jsEvent) {
+            document.getElementById('myModal').innerHTML = loadModel("Crear");
+            lanzarAjax('consultarTodasAsignaturas',['<?php echo $_SESSION["us-mail"];?>', null]);
+            lanzarAjax("consultarTodosTipos",[null]);
+            var a = document.getElementById('modal-date').value = moment(date).format('DD-MM-YYYY');
+            $('.dp-input').datepicker({format: "dd-mm-yyyy",language: "es",autoclose: true,todayHighlight: true,defaultDate:a});
+            //document.getElementById('modal-update').onclick = function(){lanzarAjax('actualizarEvento', [calEvent.id,document.getElementById('modal-sign').value,document.getElementById('modal-type').value + " " + document.getElementById('modal-tnumber').value,document.getElementById('modal-date').value.split('-').reverse().join('-'),document.getElementById('modal-%').value,document.getElementById('modal-note').value]);refrescarEvento();$('#myModal').modal('hide');};
+            //document.getElementById('modal-delete').onclick = function(){lanzarAjax('eliminarEvento',calEvent.id);refrescarEvento();$('#myModal').modal('hide');};
+            document.getElementById('label_status').innerHTML = "---";
+            $('#myModal').modal('show');
+          },
           defaultView: 'month',
     		  navLinks: true, // can click day/week names to navigate views
     	});

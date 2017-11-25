@@ -147,7 +147,7 @@
   function actualizarEvento($array){
       global $conn;
 
-      $sql = "UPDATE eventos SET porcentaje = '" . $array[1] . "', nota = '" . $array[2] . "' where id = '" . $array[0] . "';";
+      $sql = "UPDATE eventos SET siglas = '" . $array[1] . "', nivel = '" . $array[2] . "', fecha = '". $array[3] ."', porcentaje = '" . $array[4] . "', nota = '" . $array[5] . "' where id = '" . $array[0] . "';";
 
       if ($conn->query($sql) === TRUE) {
         echo json_encode(array("success","Asignatura actualizada correctamente."));
